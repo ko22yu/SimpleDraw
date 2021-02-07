@@ -25,7 +25,10 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
   DrawPanel panel;
   JFileChooser fileChooser;
   int oldx, oldy, newx, newy;
+  int beforex, beforey;
   JPanel panelToolbar;
+  JLabel function1, function2;
+  JPanel panelFunction;
   JPanel panelCurrentColor;
   JPanel panelBtn;
   JPanel panelSlider;
@@ -63,17 +66,13 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
 			panelBtn.add(btn);
 		}
     */
-    JLabel function1 = new JLabel("　 現在の機能");
-    //function1.setOpaque(true);
-    //function1.setPreferredSize(new Dimension(100, 25));
-    //function1.setHorizontalAlignment(JLabel.CENTER);
-    JLabel function2 = new JLabel("　　" + currentPenType);
-    //function2.setOpaque(true);
-    //function2.setPreferredSize(new Dimension(100, 25));
-    //function2.setHorizontalAlignment(JLabel.CENTER);
-    JPanel panelFunction = new JPanel();
-    panelFunction.setPreferredSize(new Dimension(100, 40));
-    panelFunction.setLayout(new BoxLayout(panelFunction, BoxLayout.Y_AXIS));
+    function1 = new JLabel("現在の機能");
+    function2 = new JLabel("　ペン　");
+    panelFunction = new JPanel();
+    panelFunction.setPreferredSize(new Dimension(120, 50));
+    panelFunction.setBackground(Color.white);
+    //panelFunction.setLayout(new BoxLayout(panelFunction, BoxLayout.Y_AXIS));
+    panelFunction.setLayout(new FlowLayout());
     panelFunction.add(function1);
     panelFunction.add(function2);
     panelToolbar.add(panelFunction);
@@ -138,6 +137,16 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
     this.addMenuItem(menuFile,"新規作成","New",this);
     this.addMenuItem(menuFile,"開く","Open",this);
     this.addMenuItem(menuFile,"保存する","Save",this);
+    ImageIcon iconSize = new ImageIcon("images/Size.png");
+    JMenu menuSize = new JMenu("キャンバスのサイズを変更する");
+    menuSize.setIcon(iconSize);
+    this.addMenuItem(menuSize,"A4サイズ(横)","A4-horizontal",this);
+    this.addMenuItem(menuSize,"A4サイズ(縦)","A4-vertical",this);
+    this.addMenuItem(menuSize,"B5サイズ(横)","B5-horizontal",this);
+    this.addMenuItem(menuSize,"B5サイズ(縦)","B5-vertical",this);
+    this.addMenuItem(menuSize,"L判サイズ(横)","L-horizontal",this);
+    this.addMenuItem(menuSize,"L判サイズ(縦)","L-vertical",this);
+    menuFile.add(menuSize);
     menubar.add(menuFile);
     this.setJMenuBar(menubar);
 
@@ -272,7 +281,102 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
           panel.saveFile(fileChooser.getSelectedFile());
         }
       }
+      else if(command == "A4-horizontal"){
+        ret = JOptionPane.showConfirmDialog(null, "用紙が白紙に戻ってしまいますがよろしいですか？", "最終確認", JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE);
+        if(ret == JOptionPane.YES_OPTION){
+          panel.createBuffer(297*3, 210*3);  //バッファを作り直す
 
+          try{
+            panel.prepareBack();
+          }
+          catch(AWTException aecp){
+            aecp.printStackTrace();
+          }
+          catch (Exception ecp) {
+            ecp.printStackTrace();
+          }
+        }
+      }
+      else if(command == "A4-vertical"){
+        ret = JOptionPane.showConfirmDialog(null, "用紙が白紙に戻ってしまいますがよろしいですか？", "最終確認", JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE);
+        if(ret == JOptionPane.YES_OPTION){
+          panel.createBuffer((int)(210*2.1), (int)(297*2.1));  //バッファを作り直す
+
+          try{
+            panel.prepareBack();
+          }
+          catch(AWTException aecp){
+            aecp.printStackTrace();
+          }
+          catch (Exception ecp) {
+            ecp.printStackTrace();
+          }
+        }
+      }
+      else if(command == "B5-horizontal"){
+        ret = JOptionPane.showConfirmDialog(null, "用紙が白紙に戻ってしまいますがよろしいですか？", "最終確認", JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE);
+        if(ret == JOptionPane.YES_OPTION){
+          panel.createBuffer((int)(257*3.5), (int)(182*3.5));  //バッファを作り直す
+
+          try{
+            panel.prepareBack();
+          }
+          catch(AWTException aecp){
+            aecp.printStackTrace();
+          }
+          catch (Exception ecp) {
+            ecp.printStackTrace();
+          }
+        }
+      }
+      else if(command == "B5-vertical"){
+        ret = JOptionPane.showConfirmDialog(null, "用紙が白紙に戻ってしまいますがよろしいですか？", "最終確認", JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE);
+        if(ret == JOptionPane.YES_OPTION){
+          panel.createBuffer((int)(182*2.5), (int)(257*2.5));  //バッファを作り直す
+
+          try{
+            panel.prepareBack();
+          }
+          catch(AWTException aecp){
+            aecp.printStackTrace();
+          }
+          catch (Exception ecp) {
+            ecp.printStackTrace();
+          }
+        }
+      }
+      else if(command == "L-horizontal"){
+        ret = JOptionPane.showConfirmDialog(null, "用紙が白紙に戻ってしまいますがよろしいですか？", "最終確認", JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE);
+        if(ret == JOptionPane.YES_OPTION){
+          panel.createBuffer(127*7, 89*7);  //バッファを作り直す
+
+          try{
+            panel.prepareBack();
+          }
+          catch(AWTException aecp){
+            aecp.printStackTrace();
+          }
+          catch (Exception ecp) {
+            ecp.printStackTrace();
+          }
+        }
+      }
+      else if(command == "L-vertical"){
+        ret = JOptionPane.showConfirmDialog(null, "用紙が白紙に戻ってしまいますがよろしいですか？", "最終確認", JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE);
+        if(ret == JOptionPane.YES_OPTION){
+          panel.createBuffer(89*5, 127*5);  //バッファを作り直す
+
+          try{
+            panel.prepareBack();
+          }
+          catch(AWTException aecp){
+            aecp.printStackTrace();
+          }
+          catch (Exception ecp) {
+            ecp.printStackTrace();
+          }
+        }
+      }
 
       else if(command == "Black"){
         panel.setPenColor(Color.black);
@@ -317,42 +421,55 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
 
       else if(command == "width1"){
         panel.setPenWidth(1.0f);
+        slider.setValue((int)1.0f);
       }
       else if(command == "width5"){
         panel.setPenWidth(5.0f);
+        slider.setValue((int)5.0f);
       }
       else if(command == "width10"){
         panel.setPenWidth(10.0f);
+        slider.setValue((int)10.0f);
       }
       else if(command == "width20"){
         panel.setPenWidth(20.0f);
+        slider.setValue((int)20.0f);
       }
 
       else if(command == "Normal"){
         currentPenType = "Normal";
+        function2.setText("　ペン　");
       }
       else if(command == "Dot"){
         currentPenType = "Dot";
+        function2.setText("　ドット　");
       }
       else if(command == "Brush"){
         currentPenType = "Brush";
         panel.setPenWidth(20);
+        slider.setValue((int)20.0f);
+        function2.setText("　　筆　　");
       }
       else if(command == "Rainbow"){
         currentPenType = "Rainbow";
+        function2.setText("レインボーペン");
       }
 
       else if(command == "Spring"){
         currentPenType = "Spring";
+        function2.setText("コロコロペン(花びら)");
       }
       else if(command == "Summer"){
         currentPenType = "Summer";
+        function2.setText("コロコロペン(葉っぱ)");
       }
       else if(command == "Fall"){
         currentPenType = "Fall";
+        function2.setText("コロコロペン(落ち葉)");
       }
       else if(command == "Winter"){
         currentPenType = "Winter";
+        function2.setText("コロコロペン(雪の結晶)");
       }
       else if(command == "StringKorokoro"){
         currentPenType = "StringKorokoro";
@@ -368,6 +485,7 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
           if(choiceNum == -1){
             JOptionPane.showMessageDialog(this, "キャンセルされました", "キャンセル", JOptionPane.WARNING_MESSAGE);
           }
+          function2.setText("コロコロペン(文字)");
         }
       }
       else if(command == "PictureKorokoro"){
@@ -377,30 +495,38 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
           path = fileChooser.getSelectedFile().getPath(); //選択した画像の絶対パス
           //System.out.println(fileChooser.getSelectedFile().getPath());
         }
+        function2.setText("コロコロペン");
       }
 
 
       else if(command == "StraightLine"){
         currentPenType = "StraightLine";
+        function2.setText("　直線　");
       }
       else if(command == "Rectangle"){
         currentPenType = "Rectangle";
+        function2.setText("　四角形　");
       }
       else if(command == "FillRectangle"){
         currentPenType = "FillRectangle";
+        function2.setText("四角形(塗りつぶし)");
       }
       else if(command == "Oval"){
         currentPenType = "Oval";
+        function2.setText("　楕円　");
       }
       else if(command == "FillOval"){
         currentPenType = "FillOval";
+        function2.setText("楕円(塗りつぶし)");
       }
 
       else if(command == "Heart"){
         currentPenType = "Heart";
+        function2.setText("スタンプ(ハート)");
       }
       else if(command == "Star"){
         currentPenType = "Star";
+        function2.setText("スタンプ(星)");
       }
       else if(command == "Picture"){
         currentPenType = "Picture";
@@ -409,6 +535,7 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
           path = fileChooser.getSelectedFile().getPath(); //選択した画像の絶対パス
           //System.out.println(fileChooser.getSelectedFile().getPath());
         }
+        function2.setText("スタンプ");
       }
 
       else if(command == "stampString"){
@@ -425,24 +552,30 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
           if(choiceNum == -1){
             JOptionPane.showMessageDialog(this, "キャンセルされました", "キャンセル", JOptionPane.WARNING_MESSAGE);
           }
+          function2.setText("スタンプ(文字)");
         }
       }
 
 
       else if(command == "Copy"){
         currentPenType = "Copy";
+        function2.setText("　コピー　");
       }
       else if(command == "Cut"){
         currentPenType = "Cut";
+        function2.setText("　カット　");
       }
       else if(command == "Paste"){
         currentPenType = "Paste";
+        function2.setText("ペースト");
       }
       else if(command == "Dropper"){
         currentPenType = "Dropper";
+        function2.setText("スポイト");
       }
       else if(command == "Fill"){
         currentPenType = "Fill";
+        function2.setText("塗りつぶし");
       }
 
 
@@ -469,10 +602,14 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
       /* ツールバー */
       else if(command == "Pen"){ //ペン
         currentPenType = "Normal";
+        panel.setPenColor(panel.getCurrentColor());
+        panelCurrentColor.setBackground(panel.getCurrentColor());
+        panelCurrentColor.repaint();
+        function2.setText("　ペン　");
       }
       else if(command == "EraserPen"){ //消しゴム
-        currentPenType = "Normal";
-        panel.setPenColor(Color.white);
+        currentPenType = "EraserPen";
+        function2.setText("消しゴム");
       }
       else if(command == "Back"){ //戻る
         if(not_twice) not_twice = false;
@@ -507,6 +644,14 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
       oldx = newx;
       oldy = newy;
     }
+    else if(currentPenType.equals("EraserPen")){
+      newx = e.getX();
+      newy = e.getY();
+      //panel.createBuffer(panel.getWidth(),panel.getHeight());
+      panel.drawEraseLine(oldx,oldy,newx,newy);
+      oldx = newx;
+      oldy = newy;
+    }
     else if(currentPenType.equals("Dot")){
       newx = e.getX();
       newy = e.getY();
@@ -525,6 +670,29 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
       oldx = newx;
       oldy = newy;
     }
+    else if(currentPenType.equals("StraightLine")){ //ラバーバンド
+      newx = e.getX();
+      newy = e.getY();
+      panel.drawRubberLine(oldx, oldy, newx, newy, beforex, beforey);
+      beforex = newx;
+      beforey = newy;
+    }
+    /*
+    else if(currentPenType.equals("Rectangle") || currentPenType.equals("FillRectangle")){ //ラバーバンド
+      newx = e.getX();
+      newy = e.getY();
+      panel.drawRubberRectangle(oldx, oldy, newx, newy, beforex, beforey);
+      beforex = newx;
+      beforey = newy;
+    }
+    else if(currentPenType.equals("Oval") || currentPenType.equals("FillOval")){ //ラバーバンド
+      newx = e.getX();
+      newy = e.getY();
+      panel.drawRubberOval(oldx, oldy, newx, newy, beforex, beforey);
+      beforex = newx;
+      beforey = newy;
+    }
+    */
     else if(currentPenType.equals("Spring") || currentPenType.equals("Summer") || currentPenType.equals("Fall") || currentPenType.equals("Winter") || currentPenType.equals("PictureKorokoro")){
       newx = e.getX();
       newy = e.getY();
@@ -575,10 +743,12 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
       newx = e.getX();
       newy = e.getY();
       panel.drawBrush(oldx,oldy,newx,newy);
+      slider.setValue(Math.round(panel.getCurrentWidth())+1);
       oldx = newx;
       oldy = newy;
       if(panel.getCurrentWidth() <= 0.1){
         panel.setPenWidth(20.0f);
+        slider.setValue((int)20.0f);
         writing = false;
       }
     }
@@ -599,6 +769,8 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
     }
     else if(currentPenType.equals("Dropper")){
       panel.pixelColor(e.getX(), e.getY());
+      panelCurrentColor.setBackground(panel.getCurrentColor());
+      panelCurrentColor.repaint();
     }
     else if(currentPenType.equals("Fill")){
       panel.fill();
@@ -665,6 +837,11 @@ public class SimpleDraw extends JFrame implements ActionListener, MouseMotionLis
       //一筆書きを解消する
       oldx = e.getX();
       oldy = e.getY();
+
+      if(currentPenType.equals("StraightLine") || currentPenType.equals("Rectangle") || currentPenType.equals("FillRectangle") || currentPenType.equals("Oval") || currentPenType.equals("FillOval")){
+        beforex = e.getX();
+        beforey = e.getY();
+      }
     }
     else if(currentPenType.equals("StringKorokoro")){
       korokoroCount = 0;

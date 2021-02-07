@@ -18,6 +18,7 @@ public class DrawPanel extends JPanel {
   int HSB = 0;
   int copyCount = 0, backCount = 0;
   Boolean Back = false;
+  int maxx = 0, maxy = 0;
 
   public void createBuffer(int width, int height) {
     //バッファ用のImageとGraphicsを用意する
@@ -72,6 +73,21 @@ public class DrawPanel extends JPanel {
 		super.paintComponent(g); //他に描画するものがあるかもしれないので親を呼んでおく
 		if(null != bufferImage) g.drawImage(bufferImage, 0, 0, this); //バッファを表示する
 	}
+  public void drawEraseLine(int x1, int y1, int x2, int y2){ //線を描く
+    if(null == bufferGraphics) { //バッファが作られていなかったら
+		 	this.createBuffer(this.getWidth(),this.getHeight());  //バッファをまだ作ってなければ作る
+    }
+    bufferGraphics.setColor(Color.white);
+    bufferGraphics.setStroke(new BasicStroke(currentWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER)); //太さがcurrentWidthの線を描く 線の両端は丸くする
+
+    //マウスポインターと描かれる線の位置のずれを修正する
+    int distance = 75;
+    y1 -= distance;
+    y2 -= distance;
+
+    bufferGraphics.drawLine(x1, y1, x2, y2); //バッファに描画する
+		repaint(); //再描画するためpaintComponentを呼び出す。
+  }
 
   public void drawDot(int x1, int y1, int x2, int y2){ //点線を描く
     if(null == bufferGraphics) { //バッファが作られていなかったら
@@ -186,6 +202,29 @@ public class DrawPanel extends JPanel {
 		repaint(); //再描画するためpaintComponentを呼び出す。
   }
 
+  public void drawRubberLine(int x1, int y1, int x2, int y2, int beforex, int beforey){ //直線を描く(ラバーバンド)
+    if(null == bufferGraphics) { //バッファが作られていなかったら
+		 	this.createBuffer(this.getWidth(),this.getHeight());  //バッファをまだ作ってなければ作る
+    }
+    bufferGraphics.setColor(currentColor);
+    bufferGraphics.setStroke(new BasicStroke(currentWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER)); //太さがcurrentWidthの線を描く 線の両端は丸くする
+
+    //マウスポインターと描かれる線の位置のずれを修正する
+    int distance = 75;
+    y1 -= distance;
+    y2 -= distance;
+    beforey -= distance;
+
+    bufferGraphics.drawLine(x1, y1, x2, y2); //バッファに描画する
+		repaint(); //再描画するためpaintComponentを呼び出す。
+
+    bufferGraphics.setColor(Color.white);
+
+    bufferGraphics.drawLine(x1, y1, beforex, beforey);
+    repaint();
+
+    bufferGraphics.setColor(currentColor);
+  }
   public void drawRectangle(int x1, int y1, int x2, int y2){
     if(null == bufferGraphics) { //バッファが作られていなかったら
 		 	this.createBuffer(this.getWidth(),this.getHeight());  //バッファをまだ作ってなければ作る
@@ -201,8 +240,7 @@ public class DrawPanel extends JPanel {
     ((Graphics)bufferGraphics).drawRect(x1, y1, Math.abs(x2-x1), Math.abs(y2-y1)); //バッファに描画する
     repaint(); //再描画するためpaintComponentを呼び出す。
   }
-  /*
-  public void drawRubberRectangle(int x1, int y1, int x2, int y2){
+  public void drawRubberRectangle(int x1, int y1, int x2, int y2, int beforex, int beforey){
     if(null == bufferGraphics) { //バッファが作られていなかったら
 		 	this.createBuffer(this.getWidth(),this.getHeight());  //バッファをまだ作ってなければ作る
     }
@@ -213,13 +251,19 @@ public class DrawPanel extends JPanel {
     int distance = 75;
     y1 -= distance;
     y2 -= distance;
+    beforey -= distance;
 
     ((Graphics)bufferGraphics).drawRect(x1, y1, Math.abs(x2-x1), Math.abs(y2-y1)); //バッファに描画する
     repaint(); //再描画するためpaintComponentを呼び出す。
     ((Graphics)bufferGraphics).clearRect(x1, y1, Math.abs(x2-x1), Math.abs(y2-y1));
-    repaint();
+    bufferGraphics.setColor(Color.white);
+    bufferGraphics.setStroke(new BasicStroke(currentWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+    ((Graphics)bufferGraphics).drawLine(beforex, y1-3, beforex, beforey+3);
+    ((Graphics)bufferGraphics).drawLine(x1-3, beforey, beforex+3, beforey);
+    repaint(); //再描画するためpaintComponentを呼び出す。
+
+    bufferGraphics.setColor(currentColor);
   }
-  */
   public void drawFillRectangle(int x1, int y1, int x2, int y2){
     if(null == bufferGraphics) { //バッファが作られていなかったら
 		 	this.createBuffer(this.getWidth(),this.getHeight());  //バッファをまだ作ってなければ作る
@@ -249,6 +293,29 @@ public class DrawPanel extends JPanel {
 
     ((Graphics)bufferGraphics).drawOval(x1, y1, Math.abs(x2-x1), Math.abs(y2-y1)); //バッファに描画する
     repaint(); //再描画するためpaintComponentを呼び出す。
+  }
+  public void drawRubberOval(int x1, int y1, int x2, int y2, int beforex, int beforey){
+    if(null == bufferGraphics) { //バッファが作られていなかったら
+		 	this.createBuffer(this.getWidth(),this.getHeight());  //バッファをまだ作ってなければ作る
+    }
+    bufferGraphics.setColor(currentColor);
+    bufferGraphics.setStroke(new BasicStroke(currentWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER)); //太さがcurrentWidthの線を描く 線の両端は丸くする
+
+    //マウスポインターと描かれる線の位置のずれを修正する
+    int distance = 75;
+    y1 -= distance;
+    y2 -= distance;
+    beforey -= distance;
+
+    ((Graphics)bufferGraphics).drawOval(x1, y1, Math.abs(x2-x1), Math.abs(y2-y1)); //バッファに描画する
+    repaint(); //再描画するためpaintComponentを呼び出す。
+
+    bufferGraphics.setColor(Color.white);
+
+    ((Graphics)bufferGraphics).drawOval(x1, y1, Math.abs(beforex-x1), Math.abs(beforey-y1)); //バッファに描画する
+    repaint(); //再描画するためpaintComponentを呼び出す。
+
+    bufferGraphics.setColor(currentColor);
   }
   public void drawFillOval(int x1, int y1, int x2, int y2){
     if(null == bufferGraphics) { //バッファが作られていなかったら
